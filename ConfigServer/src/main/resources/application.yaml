@@ -1,0 +1,15 @@
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: C:\MSR\msrlabconfig
+   
+server:
+  port: 8887
+  
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
