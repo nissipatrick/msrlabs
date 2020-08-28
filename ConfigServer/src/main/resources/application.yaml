@@ -1,12 +1,15 @@
 spring:
   cloud:
     config:
+      enabled : false
+      profile : native
       server:
         git:
-          uri: C:\MSR\msrlabconfig
-   
+          uri: https://github.com/nissipatrick/msrlabconfig.git
+     
+  
 server:
-  port: 8887
+  port: 8888
   
 management:
   endpoints:
