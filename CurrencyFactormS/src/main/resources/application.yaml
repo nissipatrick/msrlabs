@@ -1,0 +1,46 @@
+server:
+  port: 9092
+
+  h2:
+    console:
+      enabled: true
+      path: /h2
+      settings:
+        web-allow-others: true
+  datasource:
+    url: ${currencyfactorms.datasource.url}
+    username: ${currencyfactorms.datasource.username}
+    password: ${currencyfactorms.datasource.password}   
+    driver-class-name: org.h2.Driver 
+  jpa:
+    show-sql: true
+ 
+spring:
+  application:
+    name:   currencyfactorms   
+
+eureka:
+  instance:
+    instanceId: ${spring.application.name}:${random.int}
+    leaseRenewalIntervalInSeconds: 2
+    leaseExpirationDurationInSeconds: 5
+    preferIpAddress: true
+    metadata-map:
+      zone: A
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    prefer-same-zone-eureka: true
+    serviceUrl:
+       defaultZone: ${currencyfactorms.eureka.url:http://localhost:8761/eureka}
+  
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+feign:
+  hystrix:
+    enabled: true     

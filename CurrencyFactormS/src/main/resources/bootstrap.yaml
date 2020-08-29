@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    config:
+      uri: ${currencyfactorms.config.server.url:http://localhost:8888}
+      fail-fast: true
+      
+  application:
+    name: currencyfactorms
+  profiles:
+    active: dev
