@@ -1,0 +1,6 @@
+spring:
+  cloud:
+    config:
+      uri: ${apigateway.config.server.url:http://localhost:8888}
+      fail-fast: true  application:    name: apigateway
+  profiles:    active: dev
