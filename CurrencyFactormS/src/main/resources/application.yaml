@@ -1,5 +1,18 @@
 server:
   port: 9092
+     
+  
+spring:
+  application:
+    name: currencyfactorms
+  sleuth:
+    enabled: true
+    trace-id128: ${currencyfactorms.sleuth.trace128:true}
+    sampler:
+      probability: 1.0      
+  zipkin:
+    enabled: true
+    base-url: ${zipkin.url:http://127.0.0.1:9411} 
 
   h2:
     console:
@@ -15,9 +28,6 @@ server:
   jpa:
     show-sql: true
  
-spring:
-  application:
-    name:   currencyfactorms   
 
 eureka:
   instance:
