@@ -3,7 +3,16 @@ server:
   
 spring:
   application:
-    name: convertcurrencyms
+    name: convertcurrencyms 
+  sleuth:
+    enabled: true
+    trace-id128: ${convertcurrencyms.sleuth.trace128:true}
+    sampler:
+      probability: 1.0      
+  zipkin:
+    enabled: true
+    base-url: ${zipkin.url:http://127.0.0.1:9411} 
+
 
 eureka:
   instance:
