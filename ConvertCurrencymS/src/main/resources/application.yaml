@@ -11,7 +11,7 @@ spring:
       probability: 1.0      
   zipkin:
     enabled: true
-    base-url: ${zipkin.url:http://127.0.0.1:9411} 
+    base-url: http://127.0.0.1:9411
 
 
 eureka:
