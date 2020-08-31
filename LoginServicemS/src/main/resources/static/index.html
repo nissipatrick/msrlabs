@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Boot App ID Sample</title>
+    <link type="text/css" href="css/style.css" rel="stylesheet" />
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/js-cookie/js.cookie.js"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({
+                beforeSend : function(xhr, settings) {
+                    if (settings.type == 'POST' || settings.type == 'PUT'
+                        || settings.type == 'DELETE') {
+                        if (!(/^http:.*/.test(settings.url) || /^https:.*/
+                            .test(settings.url))) {
+                            // Only send the token to relative URLs i.e. locally.
+                            xhr.setRequestHeader("X-XSRF-TOKEN",
+                                Cookies.get('XSRF-TOKEN'));
+                        }
+                    }
+                }
+            });
+        $.get("/user", function(data) {
+            $("#user").html(data.userAuthentication.details.name);
+            $("#userSub").html(data.userAuthentication.details.sub);
+            $("#userEmail").html(data.userAuthentication.details.email);
+            $("#provider").html(data.userAuthentication.details.identities[0].provider);
+            $(".unauthenticated").hide()
+            $(".authenticated").show()
+        }).fail(function() {
+            $(".unauthenticated").show()
+            $(".authenticated").hide()
+        });
+ 
+        <!-- In this case, we will call GET /userInfo, and this will give us back a string with userinfo details from Principal user -->
+        $.get("/userInfo", function(data) {
+            $("#userInfoString").html(data);
+            $(".unauthenticated").hide()
+            $(".authenticated").show()
+        }).fail(function() {
+            $(".unauthenticated").show()
+            $(".authenticated").hide()
+        });
+        
+        $.get("/userToken", function(data) {
+			$("#userToken").html(data);
+			$(".unauthenticated").hide()
+			$(".authenticated").show()
+		}).fail(function() {
+			$(".unauthenticated").show()
+			$(".authenticated").hide()
+		});
+ 
+        var logout = function() {
+            $.post("/logout", function() {
+                $("#user").html('');
+                $(".unauthenticated").show();
+                $(".authenticated").hide();
+            })
+            return true;
+        }
+       
+    </script>
+ 
+</head>
+<div class="container unauthenticated" style="text-align: center;">
+    <a href="/login">Login - Happy Shopping</a>
+</div>
+<div class="container authenticated" style="text-align: center;" >
+    <strong>Logged in as: <span id="user"></span></strong>
+    <br>
+    <br>
+    <strong>Sub: </strong><span id="userSub"></span>
+    <br>
+    <strong>Email: </strong><span id="userEmail"></span>
+    <br>
+    <strong>Provider: </strong><span id="provider"></span>
+    <br>
+    <br>
+	<strong>User Token: </strong><span id="userToken"></span>
+	<br>
+    <br>
+    <strong>User Profile Information: </strong>
+    <br>
+    <span id="userInfoString"></span>
+    <br>
+    <br>
+    <button onClick="logout()">Logout</button>
+    
+    <br>
+    <br>
+    <strong>Groceries Items</strong>
+    <br>
+    <br>
+    
+    <table  border="1" id="Table1" style="border-collapse: collapse;margin-left:auto;margin-right:auto;">
+    <tr>
+        <th style="width:80px">Order Id</th>
+        <th style="width:180px">Product Name</th>
+        <th style="width:120px">Price</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>Sunflower Oil</td>
+        <td>250</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Groundnut Oil</td>
+        <td>150</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>Coconut Oil</td>
+        <td>425</td>
+    </tr>
+</table>
+<br>
+
+<br>
+
+        Placing Order -> 
+        <br>
+        Product Name:<input type="text" name="prdname" id="prdname">   
+        Quantity:<input type="text" name="qty" id="qty">    
+        <br>
+<br>
+<input id = "order" type="button" value="Add to Cart" onclick="placeOrder();"/>
+<label id="orderId"></label>
+
+
+<script>
+		
+		
+		
+	function placeOrder(){
+	
+			if(document.getElementById('prdname').value == null || document.getElementById('prdname').value == '')
+				alert('Please Provide Product to be added in Cart');
+			if(document.getElementById('qty').value == null || document.getElementById('qty').value == '')
+				alert('Please enter the quantity');
+			var itemName = document.getElementById('prdname').value;
+			var quantity = document.getElementById('qty').value;
+			var userToken = document.getElementById('userToken').innerHTML;
+			var url = "http://localhost:9093/placingorderms/add/"+itemName+"/"+quantity+"/"+userToken;
+			
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var response = xhttp.responseText;
+				document.getElementById("orderId").innerHTML = response;
+				document.getElementById('prdname').value='';
+			 }
+		};
+		xhttp.open("GET", url, true);
+		xhttp.send();
+	}
+
+</script>
+<br>  
+      
+</div>
+</body>
+</html>
