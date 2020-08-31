@@ -6,7 +6,11 @@ spring:
       server:
         git:
           uri: https://github.com/nissipatrick/msrlabconfig.git
-     
+    bus:
+      destination: configXchange
+  rabbitmq:
+    host: ${rabbitmq.host:192.168.99.101}   
+    port: 5672      
   
 server:
   port: 8888
